@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    id="com.jcjee.plugins.emailcomposer"
-    version="1.4.6">
+    id="de.hellmann-ecommerce.plugins.emailcomposer"
+    version="1.0.0">
     
     <name>Email Composer with Attachments</name>
     
     <description>
         &lt;p&gt;Email Composer with Attachments&lt;/p&gt;
         
-        &lt;p&gt;Email Composer with Attachments. Modified from the original Phonegap plugin
-        to accept multiple attachments&lt;/p&gt;
+        &lt;p&gt;Email Composer with Attachments. Forked from com.jcjee.plugins.emailcomposer.&lt;/p&gt;
     </description>
     
     <license>MIT</license>
