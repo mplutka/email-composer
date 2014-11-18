@@ -33,8 +33,12 @@ import org.apache.cordova.LOG;
 
 public class EmailComposer extends CordovaPlugin {
 
+	private CallbackContext command;
+
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+
+		this.command = callbackContext;
 
 		if ("showEmailComposer".equals(action)) {
 			try {
@@ -200,6 +204,7 @@ public class EmailComposer extends CordovaPlugin {
 		super.onActivityResult(requestCode, resultCode, intent);
 		LOG.e("EmailComposer", "ResultCode: " + resultCode);
 		// IT DOESN'T SEEM TO HANDLE RESULT CODES
+		command.success();
 	}
 
 }
