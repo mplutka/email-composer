@@ -33,6 +33,7 @@ import android.util.Base64;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.PluginResult;
 import org.apache.cordova.LOG;
 
 public class EmailComposer extends CordovaPlugin {
@@ -57,11 +58,36 @@ public class EmailComposer extends CordovaPlugin {
 			}
 			// callbackContext.success();
 			return true;
-		} else {
-                    LOG.e("EmailComposer", "Method not found");
+		}
+
+                if ("isServiceAvailable".equals(action)) {
+                    isServiceAvailable();
+
+                    return true;
                 }
+
 		return false;  // Returning false results in a "MethodNotFound" error.
 	}
+
+        /**
+         * Überprüft, ob Emails versendet werden können.
+         */
+        private void isServiceAvailable () {
+                Boolean available   = isEmailAccountConfigured();
+                PluginResult result = new PluginResult(PluginResult.Status.OK, available);
+
+                command.sendPluginResult(result);
+        }
+
+        /**
+         * Gibt an, ob es eine Anwendung gibt, welche E-Mails versenden kann.
+         */
+        private Boolean isEmailAccountConfigured () {
+                Intent  intent    = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto","max@mustermann.com", null));
+                Boolean available = cordova.getActivity().getPackageManager().queryIntentActivities(intent, 0).size() > 0;
+
+                return available;
+        }
 
 	private void sendEmail(JSONObject parameters) {
 		
@@ -100,11 +126,13 @@ public class EmailComposer extends CordovaPlugin {
 				if (isHTML) {
 					emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, Html.fromHtml(body));
 				} else {
-                                        // mplutka@hellmann.net: Workaroudn for exception
-                                        ArrayList<String> extra_text = new ArrayList<String>();
+                                        // mplutka@hellmann.net: Try fix for exception -> empty body
+                                        /*
+                                        ArrayList<CharSequence> extra_text = new ArrayList<CharSequence>();
                                         extra_text.add(body);
-                                        emailIntent.putStringArrayListExtra(android.content.Intent.EXTRA_TEXT, extra_text); 
-					//emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, body);
+                                        emailIntent.putCharSequenceArrayListExtra(android.content.Intent.EXTRA_TEXT, extra_text);
+                                        */
+					emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, body);
 				}
 			}
 		} catch (Exception e) {
@@ -219,10 +247,12 @@ public class EmailComposer extends CordovaPlugin {
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-		// TODO handle callback
-		//super.onActivityResult(requestCode, resultCode, intent);
+		
+                super.onActivityResult(requestCode, resultCode, intent);
 		LOG.e("EmailComposer", "ResultCode: " + resultCode);
-		// IT DOESN'T SEEM TO HANDLE RESULT CODES
+
+		// resultCode is always 0 because Android doesn't provide a different resultCode e.g. for email discarded or saved
+                // so we set it to 2 here
 		command.success(2);
 	}
 
