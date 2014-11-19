@@ -1,4 +1,9 @@
-# Email Composer with Attachments Plugin #
+# Email composer with attachments (iOS + Android) #
+
+This version was forked from com.jcjee.plugins.emailcomposer and contains some fixes for Android e.g. the callback function gets
+called correctly now. Result codes still don't work. Will try to fix this in an upcoming version and also add a isServiceAvailable method.
+
+## Old readme ##
 
 Email Composer with Attachments allows for sending of emails with attachments. Modified from the original Phonegap plugin to accept attachment data directly from JavaScript, encoded in Base64.
 

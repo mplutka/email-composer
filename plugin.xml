@@ -4,12 +4,10 @@
     id="de.hellmannecommerce.plugins.emailcomposer"
     version="1.0.1">
     
-    <name>Email Composer with Attachments</name>
+    <name>Email composer with attachments (iOS + Android)</name>
     
-    <description>
-        &lt;p&gt;Email Composer with Attachments&lt;/p&gt;
-        
-        &lt;p&gt;Email Composer with Attachments. Forked from com.jcjee.plugins.emailcomposer and fixed for Android.&lt;/p&gt;
+    <description>        
+        &lt;p&gt;Forked from com.jcjee.plugins.emailcomposer and fixed for Android.&lt;/p&gt;
     </description>
     
     <license>MIT</license>
