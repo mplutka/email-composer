@@ -10,9 +10,13 @@
  *
  * Jia Chang Jee 2013
  *
+ * Version 1.4
+ *
+ * Markus Plutka 2014
+ *
  */
 
-package com.jcjee.plugins;
+package de.hellmannecommerce.plugins;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -45,19 +49,24 @@ public class EmailComposer extends CordovaPlugin {
 				JSONObject parameters = args.getJSONObject(0);
 				if (parameters != null) {
 					sendEmail(parameters);
-				}
+				} else {
+                                    LOG.e("EmailComposer", "No parameters");
+                                }
 			} catch (Exception e) {
 				LOG.e("EmailComposer", "Unable to send email");
 			}
-			callbackContext.success();
+			// callbackContext.success();
 			return true;
-		}
+		} else {
+                    LOG.e("EmailComposer", "Method not found");
+                }
 		return false;  // Returning false results in a "MethodNotFound" error.
 	}
 
 	private void sendEmail(JSONObject parameters) {
 		
 		final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND_MULTIPLE);
+                final EmailComposer plugin = this;
 		
 		//String callback = parameters.getString("callback");
 
@@ -91,7 +100,11 @@ public class EmailComposer extends CordovaPlugin {
 				if (isHTML) {
 					emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, Html.fromHtml(body));
 				} else {
-					emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, body);
+                                        // mplutka@hellmann.net: Workaroudn for exception
+                                        ArrayList<String> extra_text = new ArrayList<String>();
+                                        extra_text.add(body);
+                                        emailIntent.putStringArrayListExtra(android.content.Intent.EXTRA_TEXT, extra_text); 
+					//emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, body);
 				}
 			}
 		} catch (Exception e) {
@@ -165,6 +178,7 @@ public class EmailComposer extends CordovaPlugin {
 			LOG.e("EmailComposer", "Error handling attachments param: " + e.toString());
 		}
 
+                    
 		// setting attachments data
 		try {
 			JSONArray attachmentsData = parameters.getJSONArray("attachmentsData");
@@ -193,18 +207,23 @@ public class EmailComposer extends CordovaPlugin {
 			}
 		} catch (Exception e) {
 			LOG.e("EmailComposer", "Error handling attachmentsData param: " + e.toString());
-		}
+		} 
 		
-		this.cordova.startActivityForResult(this, emailIntent, 0);
+                this.cordova.getThreadPool().execute( new Runnable() {
+                    public void run() {
+                        cordova.startActivityForResult(plugin, Intent.createChooser(emailIntent, "Select Email App"), 0);
+                    }
+                });
+		//this.cordova.startActivityForResult(this, emailIntent, 0);
 	}
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		// TODO handle callback
-		super.onActivityResult(requestCode, resultCode, intent);
+		//super.onActivityResult(requestCode, resultCode, intent);
 		LOG.e("EmailComposer", "ResultCode: " + resultCode);
 		// IT DOESN'T SEEM TO HANDLE RESULT CODES
-		command.success();
+		command.success(2);
 	}
 
 }

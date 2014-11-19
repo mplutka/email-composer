@@ -1,4 +1,4 @@
-package com.jcjee.plugins;
+package de.hellmannecommerce.plugins;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,7 +15,7 @@ import android.webkit.MimeTypeMap;
 
 public class EmailAttachmentProvider extends ContentProvider {
 	
-	public static final String AUTHORITY = "com.jcjee.plugins.emailcomposer.provider";
+	public static final String AUTHORITY = "de.hellmann-ecommerce.plugins.emailcomposer.provider";
 	
 	private UriMatcher uriMatcher;
 
