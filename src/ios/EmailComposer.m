@@ -45,9 +45,12 @@
 //}
 
 // COMMENT THIS METHOD if you want to use the plugin with versions of cordova < 2.2.0
-- (void) showEmailComposer:(CDVInvokedUrlCommand*)command {
-    NSDictionary *parameters = [command.arguments objectAtIndex:0];
-    [self showEmailComposerWithParameters:parameters];
+- (void) showEmailComposer:(CDVInvokedUrlCommand*)command 
+{
+    [self.commandDelegate runInBackground:^{
+        NSDictionary *parameters = [command.arguments objectAtIndex:0];
+        [self showEmailComposerWithParameters:parameters];
+    }];
 }
 
 -(void) showEmailComposerWithParameters:(NSDictionary*)parameters {
