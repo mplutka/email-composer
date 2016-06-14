@@ -45,12 +45,9 @@
 //}
 
 // COMMENT THIS METHOD if you want to use the plugin with versions of cordova < 2.2.0
-- (void) showEmailComposer:(CDVInvokedUrlCommand*)command 
-{
-    [self.commandDelegate runInBackground:^{
-        NSDictionary *parameters = [command.arguments objectAtIndex:0];
-        [self showEmailComposerWithParameters:parameters];
-    }];
+- (void) showEmailComposer:(CDVInvokedUrlCommand*)command {
+    NSDictionary *parameters = [command.arguments objectAtIndex:0];
+    [self showEmailComposerWithParameters:parameters];
 }
 
 -(void) showEmailComposerWithParameters:(NSDictionary*)parameters {
@@ -201,7 +198,7 @@
 
 // Call the callback with the specified code
 -(void) returnWithCode:(int)code {
-    [self writeJavascript:[NSString stringWithFormat:@"window.plugins.emailComposer._didFinishWithResult(%d);", code]];
+    [self.commandDelegate evalJs:[NSString stringWithFormat:@"window.plugins.emailComposer._didFinishWithResult(%d);", code]];
 }
 
 // Retrieve the mime type from the file extension
